@@ -1,0 +1,11 @@
+{
+  "name": "obs-kiss",
+  "version": "1.0.0",
+  "description": "A kiss obs websocket client",
+  "main": "index.js",
+  "scripts": {
+    "test": "bun ../test/test.js"
+  },
+  "author": "Katzentatzentanz",
+  "license": "ISC"
+}
