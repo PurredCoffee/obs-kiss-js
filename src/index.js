@@ -1,5 +1,20 @@
 const { enums, createRequestObj, eventParams, requestParams } = require('./obs-codegen');
 
+let hashFunc = (data) => {
+    return new Bun.SHA256().update(data).digest('base64');
+}
+let uuidFunc = () => {
+    return Bun.randomUUIDv7();
+}
+if(!Bun) {
+    const crypto = require('crypto');
+    hashfunc = (data) => {
+        crypto.createHash('sha256').update(data).digest('base64');
+    }
+    uuidFunc = () => {
+        crypto.randomUUID();
+    }
+}
 /**
  * @import codegen from './obs-codegen'
  */
@@ -8,7 +23,7 @@ const supportedVersions = [1];
 
 class OBSCommandPromise extends Promise {
     constructor(executor) {
-        const id = Bun.randomUUIDv7();
+        const id = uuidFunc;
         super((resolve, reject) => {
             return executor(id, resolve, reject);
         });
@@ -159,9 +174,9 @@ class OBSWebSocket {
                                 throw new Error("no password provided but required by the OBS Server.");
                             }
                             const concat = password + data.d.authentication.salt;
-                            const base64secret = new Bun.SHA256().update(concat).digest('base64');
+                            const base64secret = hashFunc(concat);
                             const challenge = base64secret + data.d.authentication.challenge;
-                            response.authentication = new Bun.SHA256().update(challenge).digest('base64');
+                            response.authentication = hashFunc(challenge);
                         }
                         this.ws.send(JSON.stringify({
                             d: response, op: enums.webSocketOpCode.identify
@@ -219,7 +234,7 @@ class OBSWebSocket {
             delete this.internal.unsentCommands[com.obs_command_id];
             delete this.internal.openRequests[com.obs_command_id];
         });
-        const new_id = Bun.randomUUIDv7();
+        const new_id = uuidFunc;
         this.internal.unsentCommands[new_id] = {
             d: { 
                 requestId: new_id,
@@ -254,7 +269,7 @@ class OBSWebSocket {
             cb: callback,
             parent: this,
             is_enabled: false,
-            uuid: Bun.randomUUIDv7(),
+            uuid: uuidFunc,
             type: type,
             off() {
                 this.parent.offEvent(handler);
@@ -286,7 +301,7 @@ class OBSWebSocket {
             cb: callback,
             parent: this,
             is_enabled: false,
-            uuid: Bun.randomUUIDv7(),
+            uuid: uuidFunc,
             off() {
                 this.parent.offClose(handler);
                 this.is_enabled = false;
