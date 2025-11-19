@@ -1,3 +1,9 @@
+## Requirements
+- OBS with obs-websocket enabled (set password in Tools → WebSocket Server). (Not preinstalled on some distributions)
+- Node.js v22 compliant js interpreter.
+
+## Quick example
+```js
 const { OBSWebSocket } = require('../src/index');
 
 // connecting, password optional if not specified in OBS
@@ -25,3 +31,4 @@ obs_ws.onEvent('CurrentPreviewSceneChanged', (sceneName, sceneUuid) => {
     console.log(sceneName, sceneUuid);
 // stop listening to events
 }).off();
+```

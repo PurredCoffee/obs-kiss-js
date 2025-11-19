@@ -7,5 +7,9 @@
     "test": "bun ../test/test.js"
   },
   "author": "Katzentatzentanz",
-  "license": "ISC"
+  "license": "ISC",
+  "homepage": "https://github.com/PurredCoffee/obs-kiss-js",
+  "bugs": {
+    "url": "https://github.com/PurredCoffee/obs-kiss-js/issues"
+  }
 }
